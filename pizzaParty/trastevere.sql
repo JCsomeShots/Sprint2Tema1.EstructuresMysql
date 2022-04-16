@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: localhost
--- Tiempo de generación: 01-03-2022 a las 09:40:32
+-- Tiempo de generación: 16-04-2022 a las 12:56:42
 -- Versión del servidor: 10.4.22-MariaDB
 -- Versión de PHP: 8.1.2
 
@@ -20,45 +20,6 @@ SET time_zone = "+00:00";
 --
 -- Base de datos: `trastevere`
 --
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `bebidas`
---
-
-CREATE TABLE `bebidas` (
-  `id` tinyint(4) NOT NULL,
-  `nombre` varchar(20) NOT NULL,
-  `descripción` varchar(100) DEFAULT NULL,
-  `imagen` varbinary(125) DEFAULT NULL,
-  `precio` float NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Volcado de datos para la tabla `bebidas`
---
-
-INSERT INTO `bebidas` (`id`, `nombre`, `descripción`, `imagen`, `precio`) VALUES
-(3, 'Coca-cola', NULL, NULL, 2.5),
-(4, 'fanta', NULL, NULL, 2.5),
-(5, 'Agua 1/2', NULL, NULL, 3),
-(6, 'Vichy', NULL, NULL, 3),
-(7, 'Estrella', NULL, NULL, 4.5),
-(8, 'Sin Alcohol', NULL, NULL, 4.2);
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `bebidas_pedidos`
---
-
-CREATE TABLE `bebidas_pedidos` (
-  `bebidas_id` tinyint(4) NOT NULL,
-  `producto_id` tinyint(4) NOT NULL,
-  `cantidad` int(30) NOT NULL,
-  `precio` float NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -124,67 +85,8 @@ CREATE TABLE `cocinero` (
 --
 
 INSERT INTO `cocinero` (`id`, `nombre`, `apellido1`, `apellido2`, `nif`, `tlfn`) VALUES
-(1, 'jose', 'perez', NULL, 'aaa', 'aaa'),
-(2, 'manuel', 'rosales', NULL, 'bbb', 'bbb');
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `empleados`
---
-
-CREATE TABLE `empleados` (
-  `id` tinyint(4) NOT NULL,
-  `cocinero_id` tinyint(4) NOT NULL,
-  `repartidor_id` tinyint(4) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Volcado de datos para la tabla `empleados`
---
-
-INSERT INTO `empleados` (`id`, `cocinero_id`, `repartidor_id`) VALUES
-(2, 1, 1),
-(1, 2, 2);
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `hamburguesas`
---
-
-CREATE TABLE `hamburguesas` (
-  `id` tinyint(4) NOT NULL,
-  `nombre` varchar(30) NOT NULL,
-  `descripción` varchar(100) DEFAULT NULL,
-  `imagen` varbinary(125) DEFAULT NULL,
-  `precio` float NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Volcado de datos para la tabla `hamburguesas`
---
-
-INSERT INTO `hamburguesas` (`id`, `nombre`, `descripción`, `imagen`, `precio`) VALUES
-(1, 'Crunchy', NULL, NULL, 8.9),
-(2, 'Raclette', NULL, NULL, 9.4),
-(3, 'Foie', NULL, NULL, 11.9),
-(4, 'Jack Bacon', NULL, NULL, 11.2),
-(5, 'piri piri', NULL, NULL, 8.2),
-(6, 'pulled pork', NULL, NULL, 10.9);
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `hamburguesa_pedido`
---
-
-CREATE TABLE `hamburguesa_pedido` (
-  `hamburguesa_id` tinyint(4) NOT NULL,
-  `producto_id` tinyint(4) NOT NULL,
-  `cantidad` int(30) NOT NULL,
-  `precio` float NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+(1, 'andres', 'perez', NULL, '111', 'aaa'),
+(2, 'alfonso', 'mandibulin', NULL, '222', 'bbb');
 
 -- --------------------------------------------------------
 
@@ -221,47 +123,17 @@ CREATE TABLE `pedidos` (
   `fecha_venta` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   `tipo_pedido` enum('domicilio','tienda') NOT NULL,
   `repartidor_id` tinyint(4) DEFAULT NULL,
-  `productos_id` tinyint(4) NOT NULL,
   `resto_id` tinyint(4) NOT NULL,
   `clientes_id` tinyint(4) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- --------------------------------------------------------
-
 --
--- Estructura de tabla para la tabla `pizzas`
+-- Volcado de datos para la tabla `pedidos`
 --
 
-CREATE TABLE `pizzas` (
-  `id` tinyint(4) NOT NULL,
-  `nombre` varchar(30) NOT NULL,
-  `description` varchar(100) DEFAULT NULL,
-  `imagen_url` varchar(30) DEFAULT NULL,
-  `precio` float NOT NULL,
-  `categoria_id` tinyint(4) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Volcado de datos para la tabla `pizzas`
---
-
-INSERT INTO `pizzas` (`id`, `nombre`, `description`, `imagen_url`, `precio`, `categoria_id`) VALUES
-(4, 'clásica', NULL, NULL, 9.5, 1),
-(5, 'vegetariana', NULL, NULL, 10.4, 2),
-(6, 'barça', NULL, NULL, 7.03, 3);
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `pizza_pedido`
---
-
-CREATE TABLE `pizza_pedido` (
-  `pizza_id` tinyint(4) NOT NULL,
-  `productos_id` tinyint(4) NOT NULL,
-  `cantidad` int(30) NOT NULL,
-  `precio` float NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+INSERT INTO `pedidos` (`id`, `fecha_venta`, `tipo_pedido`, `repartidor_id`, `resto_id`, `clientes_id`) VALUES
+(1, '2022-04-16 10:35:31', 'domicilio', 2, 1, 2),
+(2, '2022-04-16 10:39:20', 'domicilio', 1, 2, 1);
 
 -- --------------------------------------------------------
 
@@ -271,10 +143,48 @@ CREATE TABLE `pizza_pedido` (
 
 CREATE TABLE `productos` (
   `id` tinyint(4) NOT NULL,
-  `pizza_pedido_id` tinyint(4) NOT NULL,
-  `hamburguesa_pedido__id` tinyint(4) NOT NULL,
-  `bebidas_pedidos_id` tinyint(4) NOT NULL
+  `tipo_producto` enum('pizza','hamburguesa','bebida','') NOT NULL,
+  `nombre` varchar(30) NOT NULL,
+  `descripcion` varchar(100) DEFAULT NULL,
+  `imagen_url` varchar(30) DEFAULT NULL,
+  `precio` float NOT NULL,
+  `categoria_id` tinyint(4) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Volcado de datos para la tabla `productos`
+--
+
+INSERT INTO `productos` (`id`, `tipo_producto`, `nombre`, `descripcion`, `imagen_url`, `precio`, `categoria_id`) VALUES
+(1, 'bebida', 'Coca-cola', NULL, NULL, 2.5, NULL),
+(2, 'bebida', 'Fanta', NULL, NULL, 2.5, NULL),
+(3, 'hamburguesa', 'Crunchy', NULL, NULL, 8.9, NULL),
+(4, 'hamburguesa', 'Raclette', NULL, NULL, 9.4, NULL),
+(5, 'pizza', 'Clasica', NULL, NULL, 9.5, 1),
+(6, 'pizza', 'vegetariana', NULL, NULL, 10.4, 2);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `productosTotal`
+--
+
+CREATE TABLE `productosTotal` (
+  `id_producto` tinyint(4) NOT NULL,
+  `id_pedido` tinyint(4) NOT NULL,
+  `precio` float NOT NULL,
+  `cantidad` int(30) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Volcado de datos para la tabla `productosTotal`
+--
+
+INSERT INTO `productosTotal` (`id_producto`, `id_pedido`, `precio`, `cantidad`) VALUES
+(1, 1, 2.4, 2),
+(2, 2, 2.5, 1),
+(4, 2, 10.4, 1),
+(5, 1, 9.4, 2);
 
 -- --------------------------------------------------------
 
@@ -331,7 +241,7 @@ CREATE TABLE `resto` (
   `nombre` varchar(30) NOT NULL,
   `dirección` varchar(30) DEFAULT NULL,
   `CP` varchar(10) DEFAULT NULL,
-  `empleado_id` tinyint(4) NOT NULL,
+  `cocinero_id` tinyint(4) NOT NULL,
   `localidad_id` tinyint(4) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -339,27 +249,13 @@ CREATE TABLE `resto` (
 -- Volcado de datos para la tabla `resto`
 --
 
-INSERT INTO `resto` (`id`, `nombre`, `dirección`, `CP`, `empleado_id`, `localidad_id`) VALUES
-(1, 'resto1', NULL, NULL, 1, 1),
-(2, 'resto2', NULL, NULL, 2, 2);
+INSERT INTO `resto` (`id`, `nombre`, `dirección`, `CP`, `cocinero_id`, `localidad_id`) VALUES
+(1, 'picola1', NULL, NULL, 2, 1),
+(2, 'picola2', NULL, NULL, 1, 3);
 
 --
 -- Índices para tablas volcadas
 --
-
---
--- Indices de la tabla `bebidas`
---
-ALTER TABLE `bebidas`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indices de la tabla `bebidas_pedidos`
---
-ALTER TABLE `bebidas_pedidos`
-  ADD KEY `id_bebidas` (`bebidas_id`,`producto_id`),
-  ADD KEY `bebidas_id` (`bebidas_id`,`producto_id`),
-  ADD KEY `producto_id` (`producto_id`);
 
 --
 -- Indices de la tabla `categoria`
@@ -381,28 +277,6 @@ ALTER TABLE `cocinero`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indices de la tabla `empleados`
---
-ALTER TABLE `empleados`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `cocinero_id` (`cocinero_id`,`repartidor_id`),
-  ADD KEY `repartidor_id` (`repartidor_id`);
-
---
--- Indices de la tabla `hamburguesas`
---
-ALTER TABLE `hamburguesas`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indices de la tabla `hamburguesa_pedido`
---
-ALTER TABLE `hamburguesa_pedido`
-  ADD KEY `id_hamburguesa` (`hamburguesa_id`,`producto_id`),
-  ADD KEY `hamburguesa_id` (`hamburguesa_id`,`producto_id`),
-  ADD KEY `producto_id` (`producto_id`);
-
---
 -- Indices de la tabla `localidad`
 --
 ALTER TABLE `localidad`
@@ -414,36 +288,23 @@ ALTER TABLE `localidad`
 --
 ALTER TABLE `pedidos`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `clientes_id` (`productos_id`),
-  ADD KEY `clientes_id_2` (`productos_id`),
   ADD KEY `repartidor_id` (`repartidor_id`),
   ADD KEY `resto_id` (`resto_id`,`clientes_id`),
   ADD KEY `clientes_id_3` (`clientes_id`);
-
---
--- Indices de la tabla `pizzas`
---
-ALTER TABLE `pizzas`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `categoria_id` (`categoria_id`),
-  ADD KEY `categoria_id_2` (`categoria_id`),
-  ADD KEY `categoria_id_3` (`categoria_id`);
-
---
--- Indices de la tabla `pizza_pedido`
---
-ALTER TABLE `pizza_pedido`
-  ADD KEY `id_pizza` (`pizza_id`,`productos_id`),
-  ADD KEY `productos_id` (`productos_id`);
 
 --
 -- Indices de la tabla `productos`
 --
 ALTER TABLE `productos`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `hamburguesa_id` (`hamburguesa_pedido__id`,`bebidas_pedidos_id`),
-  ADD KEY `pizza_id` (`pizza_pedido_id`),
-  ADD KEY `bebidas_id` (`bebidas_pedidos_id`);
+  ADD UNIQUE KEY `categoria_id` (`categoria_id`);
+
+--
+-- Indices de la tabla `productosTotal`
+--
+ALTER TABLE `productosTotal`
+  ADD UNIQUE KEY `id_producto` (`id_producto`,`id_pedido`),
+  ADD KEY `id_pedido` (`id_pedido`);
 
 --
 -- Indices de la tabla `provincia`
@@ -462,18 +323,12 @@ ALTER TABLE `repartidor`
 --
 ALTER TABLE `resto`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `pedido_id` (`empleado_id`),
+  ADD KEY `pedido_id` (`cocinero_id`),
   ADD KEY `localidad_id` (`localidad_id`);
 
 --
 -- AUTO_INCREMENT de las tablas volcadas
 --
-
---
--- AUTO_INCREMENT de la tabla `bebidas`
---
-ALTER TABLE `bebidas`
-  MODIFY `id` tinyint(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT de la tabla `categoria`
@@ -494,18 +349,6 @@ ALTER TABLE `cocinero`
   MODIFY `id` tinyint(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
--- AUTO_INCREMENT de la tabla `empleados`
---
-ALTER TABLE `empleados`
-  MODIFY `id` tinyint(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
-
---
--- AUTO_INCREMENT de la tabla `hamburguesas`
---
-ALTER TABLE `hamburguesas`
-  MODIFY `id` tinyint(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
-
---
 -- AUTO_INCREMENT de la tabla `localidad`
 --
 ALTER TABLE `localidad`
@@ -515,19 +358,13 @@ ALTER TABLE `localidad`
 -- AUTO_INCREMENT de la tabla `pedidos`
 --
 ALTER TABLE `pedidos`
-  MODIFY `id` tinyint(4) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT de la tabla `pizzas`
---
-ALTER TABLE `pizzas`
-  MODIFY `id` tinyint(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` tinyint(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT de la tabla `productos`
 --
 ALTER TABLE `productos`
-  MODIFY `id` tinyint(4) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` tinyint(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT de la tabla `provincia`
@@ -552,31 +389,10 @@ ALTER TABLE `resto`
 --
 
 --
--- Filtros para la tabla `bebidas_pedidos`
---
-ALTER TABLE `bebidas_pedidos`
-  ADD CONSTRAINT `bebidas_pedidos_ibfk_1` FOREIGN KEY (`bebidas_id`) REFERENCES `bebidas` (`id`) ON DELETE NO ACTION,
-  ADD CONSTRAINT `bebidas_pedidos_ibfk_2` FOREIGN KEY (`producto_id`) REFERENCES `productos` (`bebidas_pedidos_id`);
-
---
 -- Filtros para la tabla `clientes`
 --
 ALTER TABLE `clientes`
   ADD CONSTRAINT `clientes_ibfk_1` FOREIGN KEY (`localidad_id`) REFERENCES `localidad` (`id`) ON DELETE NO ACTION;
-
---
--- Filtros para la tabla `empleados`
---
-ALTER TABLE `empleados`
-  ADD CONSTRAINT `empleados_ibfk_1` FOREIGN KEY (`cocinero_id`) REFERENCES `cocinero` (`id`) ON DELETE NO ACTION,
-  ADD CONSTRAINT `empleados_ibfk_2` FOREIGN KEY (`repartidor_id`) REFERENCES `repartidor` (`id`) ON DELETE NO ACTION;
-
---
--- Filtros para la tabla `hamburguesa_pedido`
---
-ALTER TABLE `hamburguesa_pedido`
-  ADD CONSTRAINT `hamburguesa_pedido_ibfk_1` FOREIGN KEY (`hamburguesa_id`) REFERENCES `hamburguesas` (`id`) ON DELETE NO ACTION,
-  ADD CONSTRAINT `hamburguesa_pedido_ibfk_2` FOREIGN KEY (`producto_id`) REFERENCES `productos` (`hamburguesa_pedido__id`) ON DELETE NO ACTION;
 
 --
 -- Filtros para la tabla `localidad`
@@ -588,35 +404,29 @@ ALTER TABLE `localidad`
 -- Filtros para la tabla `pedidos`
 --
 ALTER TABLE `pedidos`
-  ADD CONSTRAINT `pedidos_ibfk_1` FOREIGN KEY (`productos_id`) REFERENCES `productos` (`id`) ON DELETE NO ACTION,
-  ADD CONSTRAINT `pedidos_ibfk_2` FOREIGN KEY (`repartidor_id`) REFERENCES `repartidor` (`id`) ON DELETE NO ACTION,
   ADD CONSTRAINT `pedidos_ibfk_3` FOREIGN KEY (`clientes_id`) REFERENCES `clientes` (`id`),
-  ADD CONSTRAINT `pedidos_ibfk_4` FOREIGN KEY (`resto_id`) REFERENCES `resto` (`id`) ON DELETE NO ACTION;
-
---
--- Filtros para la tabla `pizzas`
---
-ALTER TABLE `pizzas`
-  ADD CONSTRAINT `pizzas_ibfk_1` FOREIGN KEY (`categoria_id`) REFERENCES `categoria` (`id`) ON DELETE NO ACTION;
-
---
--- Filtros para la tabla `pizza_pedido`
---
-ALTER TABLE `pizza_pedido`
-  ADD CONSTRAINT `pizza_pedido_ibfk_1` FOREIGN KEY (`pizza_id`) REFERENCES `pizzas` (`id`);
+  ADD CONSTRAINT `pedidos_ibfk_4` FOREIGN KEY (`repartidor_id`) REFERENCES `repartidor` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `pedidos_ibfk_5` FOREIGN KEY (`resto_id`) REFERENCES `resto` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
 -- Filtros para la tabla `productos`
 --
 ALTER TABLE `productos`
-  ADD CONSTRAINT `productos_ibfk_1` FOREIGN KEY (`pizza_pedido_id`) REFERENCES `pizza_pedido` (`productos_id`) ON DELETE NO ACTION;
+  ADD CONSTRAINT `productos_ibfk_1` FOREIGN KEY (`categoria_id`) REFERENCES `categoria` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+--
+-- Filtros para la tabla `productosTotal`
+--
+ALTER TABLE `productosTotal`
+  ADD CONSTRAINT `productosTotal_ibfk_2` FOREIGN KEY (`id_producto`) REFERENCES `productos` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `productosTotal_ibfk_3` FOREIGN KEY (`id_pedido`) REFERENCES `pedidos` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
 -- Filtros para la tabla `resto`
 --
 ALTER TABLE `resto`
-  ADD CONSTRAINT `resto_ibfk_2` FOREIGN KEY (`empleado_id`) REFERENCES `empleados` (`id`) ON DELETE NO ACTION,
-  ADD CONSTRAINT `resto_ibfk_4` FOREIGN KEY (`localidad_id`) REFERENCES `localidad` (`id`) ON DELETE NO ACTION;
+  ADD CONSTRAINT `resto_ibfk_4` FOREIGN KEY (`localidad_id`) REFERENCES `localidad` (`id`) ON DELETE NO ACTION,
+  ADD CONSTRAINT `resto_ibfk_7` FOREIGN KEY (`cocinero_id`) REFERENCES `cocinero` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
