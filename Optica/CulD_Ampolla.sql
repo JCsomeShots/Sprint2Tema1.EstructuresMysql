@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: localhost
--- Tiempo de generación: 17-04-2022 a las 23:23:53
+-- Tiempo de generación: 18-04-2022 a las 01:02:05
 -- Versión del servidor: 10.4.22-MariaDB
 -- Versión de PHP: 8.1.2
 
@@ -73,22 +73,21 @@ CREATE TABLE `gafas` (
   `color_montura` varchar(12) NOT NULL,
   `precio` float(5,2) NOT NULL,
   `marca_id` tinyint(4) NOT NULL,
-  `montura` enum('Flotante','Pasta','Metálica','') NOT NULL,
-  `ventas_id` tinyint(4) DEFAULT NULL
+  `montura` enum('Flotante','Pasta','Metálica','') NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Volcado de datos para la tabla `gafas`
 --
 
-INSERT INTO `gafas` (`id`, `modelo`, `graduacion_der`, `graduacion_izq`, `colorVidre_der`, `colorVidre_izq`, `color_montura`, `precio`, `marca_id`, `montura`, `ventas_id`) VALUES
-(12, 'Aviator classic', NULL, NULL, 'verde', 'verde', 'dorado', 195.67, 1, 'Flotante', 1),
-(13, 'club master classic', NULL, NULL, 'verde', 'verde', 'negro', 147.00, 1, 'Pasta', 2),
-(14, 'Square II', NULL, NULL, 'azul', 'azul', 'azul', 132.00, 1, 'Metálica', 3),
-(15, 'Novak djokovic', NULL, NULL, 'verde', 'verde', 'carei', 185.00, 2, 'Flotante', 4),
-(16, 'La piquée', NULL, NULL, 'marrón', 'marrón', 'a_print', 155.00, 2, 'Flotante', 5),
-(17, 'Hiperfit', NULL, NULL, 'naranja', 'naranja', 'negro', 115.00, 3, 'Pasta', 6),
-(18, 'carrera 264', 1.3, 0.8, 'blanco', 'blanco', 'gris', 140.00, 3, 'Metálica', 7);
+INSERT INTO `gafas` (`id`, `modelo`, `graduacion_der`, `graduacion_izq`, `colorVidre_der`, `colorVidre_izq`, `color_montura`, `precio`, `marca_id`, `montura`) VALUES
+(12, 'Aviator classic', NULL, NULL, 'verde', 'verde', 'dorado', 195.67, 1, 'Flotante'),
+(13, 'club master classic', NULL, NULL, 'verde', 'verde', 'negro', 147.00, 1, 'Pasta'),
+(14, 'Square II', NULL, NULL, 'azul', 'azul', 'azul', 132.00, 1, 'Metálica'),
+(15, 'Novak djokovic', NULL, NULL, 'verde', 'verde', 'carei', 185.00, 2, 'Flotante'),
+(16, 'La piquée', NULL, NULL, 'marrón', 'marrón', 'a_print', 155.00, 2, 'Flotante'),
+(17, 'Hiperfit', NULL, NULL, 'naranja', 'naranja', 'negro', 115.00, 3, 'Pasta'),
+(18, 'carrera 264', 1.3, 0.8, 'blanco', 'blanco', 'gris', 140.00, 3, 'Metálica');
 
 -- --------------------------------------------------------
 
@@ -210,8 +209,7 @@ ALTER TABLE `clientes`
 --
 ALTER TABLE `gafas`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `montura_id` (`marca_id`),
-  ADD KEY `ventas_id` (`ventas_id`);
+  ADD KEY `montura_id` (`marca_id`);
 
 --
 -- Indices de la tabla `marca`
