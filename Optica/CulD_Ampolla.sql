@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: localhost
--- Tiempo de generación: 22-02-2022 a las 10:56:13
+-- Tiempo de generación: 17-04-2022 a las 23:23:53
 -- Versión del servidor: 10.4.22-MariaDB
 -- Versión de PHP: 8.1.2
 
@@ -36,7 +36,7 @@ CREATE TABLE `clientes` (
   `dir_puerta` tinyint(5) DEFAULT NULL,
   `ciudad` varchar(20) DEFAULT NULL,
   `CP` varchar(10) DEFAULT NULL,
-  `pais` varchar(20) DEFAULT NULL,
+  `pais` varchar(60) DEFAULT NULL,
   `telefono` varchar(20) DEFAULT NULL,
   `email` varchar(30) DEFAULT NULL,
   `fecha_registro` date NOT NULL DEFAULT current_timestamp(),
@@ -73,7 +73,7 @@ CREATE TABLE `gafas` (
   `color_montura` varchar(12) NOT NULL,
   `precio` float(5,2) NOT NULL,
   `marca_id` tinyint(4) NOT NULL,
-  `montura_id` tinyint(4) NOT NULL,
+  `montura` enum('Flotante','Pasta','Metálica','') NOT NULL,
   `ventas_id` tinyint(4) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -81,14 +81,14 @@ CREATE TABLE `gafas` (
 -- Volcado de datos para la tabla `gafas`
 --
 
-INSERT INTO `gafas` (`id`, `modelo`, `graduacion_der`, `graduacion_izq`, `colorVidre_der`, `colorVidre_izq`, `color_montura`, `precio`, `marca_id`, `montura_id`, `ventas_id`) VALUES
-(12, 'Aviator classic', NULL, NULL, 'verde', 'verde', 'dorado', 195.67, 1, 6, 1),
-(13, 'club master classic', NULL, NULL, 'verde', 'verde', 'negro', 147.00, 1, 4, 2),
-(14, 'Square II', NULL, NULL, 'azul', 'azul', 'azul', 132.00, 1, 5, 3),
-(15, 'Novak djokovic', NULL, NULL, 'verde', 'verde', 'carei', 185.00, 2, 6, 4),
-(16, 'La piquée', NULL, NULL, 'marrón', 'marrón', 'a_print', 155.00, 2, 5, 5),
-(17, 'Hiperfit', NULL, NULL, 'naranja', 'naranja', 'negro', 115.00, 3, 5, 6),
-(18, 'carrera 264', 1.3, 0.8, 'blanco', 'blanco', 'gris', 140.00, 3, 4, 7);
+INSERT INTO `gafas` (`id`, `modelo`, `graduacion_der`, `graduacion_izq`, `colorVidre_der`, `colorVidre_izq`, `color_montura`, `precio`, `marca_id`, `montura`, `ventas_id`) VALUES
+(12, 'Aviator classic', NULL, NULL, 'verde', 'verde', 'dorado', 195.67, 1, 'Flotante', 1),
+(13, 'club master classic', NULL, NULL, 'verde', 'verde', 'negro', 147.00, 1, 'Pasta', 2),
+(14, 'Square II', NULL, NULL, 'azul', 'azul', 'azul', 132.00, 1, 'Metálica', 3),
+(15, 'Novak djokovic', NULL, NULL, 'verde', 'verde', 'carei', 185.00, 2, 'Flotante', 4),
+(16, 'La piquée', NULL, NULL, 'marrón', 'marrón', 'a_print', 155.00, 2, 'Flotante', 5),
+(17, 'Hiperfit', NULL, NULL, 'naranja', 'naranja', 'negro', 115.00, 3, 'Pasta', 6),
+(18, 'carrera 264', 1.3, 0.8, 'blanco', 'blanco', 'gris', 140.00, 3, 'Metálica', 7);
 
 -- --------------------------------------------------------
 
@@ -145,26 +145,6 @@ INSERT INTO `proveedor` (`id`, `nombre`, `direccion_calle`, `direccion_numero`, 
 (2, 'Opticalia', 'calle Valencia', 126, 'bajos', 0, 'Barcelona', '08002', 'España', '932318749', NULL, '12345678b'),
 (3, 'bigbuy', 'compra on-line', NULL, NULL, NULL, 'barcelona ', '', 'españa', '', NULL, ''),
 (4, 'mikita', 'calle Valencia ', 125, 'bajos', NULL, 'barcelona ', '08002', 'españa', '936738877', NULL, '12345678c');
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `tipo_montura`
---
-
-CREATE TABLE `tipo_montura` (
-  `id` tinyint(4) NOT NULL,
-  `nombre_montura` varchar(20) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Volcado de datos para la tabla `tipo_montura`
---
-
-INSERT INTO `tipo_montura` (`id`, `nombre_montura`) VALUES
-(4, 'Flotante'),
-(5, 'Pasta'),
-(6, 'Metálica');
 
 -- --------------------------------------------------------
 
@@ -231,7 +211,6 @@ ALTER TABLE `clientes`
 ALTER TABLE `gafas`
   ADD PRIMARY KEY (`id`),
   ADD KEY `montura_id` (`marca_id`),
-  ADD KEY `montura_id_2` (`montura_id`),
   ADD KEY `ventas_id` (`ventas_id`);
 
 --
@@ -247,12 +226,6 @@ ALTER TABLE `marca`
 -- Indices de la tabla `proveedor`
 --
 ALTER TABLE `proveedor`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indices de la tabla `tipo_montura`
---
-ALTER TABLE `tipo_montura`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -299,12 +272,6 @@ ALTER TABLE `proveedor`
   MODIFY `id` tinyint(3) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
--- AUTO_INCREMENT de la tabla `tipo_montura`
---
-ALTER TABLE `tipo_montura`
-  MODIFY `id` tinyint(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
-
---
 -- AUTO_INCREMENT de la tabla `vendedor`
 --
 ALTER TABLE `vendedor`
@@ -330,8 +297,7 @@ ALTER TABLE `clientes`
 -- Filtros para la tabla `gafas`
 --
 ALTER TABLE `gafas`
-  ADD CONSTRAINT `gafas_ibfk_1` FOREIGN KEY (`marca_id`) REFERENCES `marca` (`id`) ON DELETE NO ACTION,
-  ADD CONSTRAINT `gafas_ibfk_2` FOREIGN KEY (`montura_id`) REFERENCES `tipo_montura` (`id`) ON DELETE NO ACTION;
+  ADD CONSTRAINT `gafas_ibfk_1` FOREIGN KEY (`marca_id`) REFERENCES `marca` (`id`) ON DELETE NO ACTION;
 
 --
 -- Filtros para la tabla `marca`
